@@ -1,0 +1,157 @@
+/**
+ * ULTRACANOPY PRO - ADVANCED STYLESHEET
+ * Версія: 1.0.4 (2026)
+ * Цей файл містить кастомну логіку оформлення, яка виходить за межі стандартного Tailwind CSS.
+ * Основний фокус: Інженерна естетика, темна тема та інтерактивність.
+ */
+
+/* 1. ГЛОБАЛЬНІ НАЛАШТУВАННЯ ТА ЗМІННІ */
+:root {
+    --brand-blue: #3b82f6;
+    --brand-dark: #020617;
+    --panel-bg: rgba(15, 23, 42, 0.7);
+    --border-color: rgba(51, 65, 85, 0.4);
+    --success-green: #10b981;
+    --danger-red: #ef4444;
+    --warning-orange: #f59e0b;
+}
+
+/* Налаштування плавного скролу та шрифтів */
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    background-color: var(--brand-dark);
+    color: #e2e8f0;
+    overflow-x: hidden;
+}
+
+/* 2. ЕФЕКТИ "СКЛЯНОЇ" ПАНЕЛІ (GLASSMORPHISM) */
+.glass-panel {
+    background: var(--panel-bg);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel:hover {
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 15px 50px -12px rgba(59, 130, 246, 0.15);
+}
+
+/* 3. ДИЗАЙН 3D В'ЮПОРТА ТА ВІДЖЕТІВ */
+#viewport-container canvas {
+    display: block;
+    outline: none;
+    cursor: grab;
+}
+
+#viewport-container canvas:active {
+    cursor: grabbing;
+}
+
+/* Анімація появи для 3D елементів */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* 4. СТИЛІЗАЦІЯ ТАБЛИЦЬ СПЕЦИФІКАЦІЇ */
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+th {
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    background: rgba(30, 41, 59, 0.3);
+}
+
+tr:hover td {
+    background: rgba(59, 130, 246, 0.03);
+    color: #fff;
+}
+
+td {
+    transition: background 0.2s ease;
+    padding: 12px 16px;
+}
+
+/* 5. ІНТЕРАКТИВНІ ЕЛЕМЕНТИ КАЛЬКУЛЯТОРА */
+input[type="number"], select {
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(51, 65, 85, 1);
+    color: #f8fafc;
+    transition: all 0.2s ease;
+}
+
+input[type="number"]:focus, select:focus {
+    outline: none;
+    border-color: var(--brand-blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Кастомний прогрес-бар для навантаження */
+.load-bar-container {
+    width: 100%;
+    height: 8px;
+    background: #1e293b;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.load-bar-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.8s cubic-bezier(0.65, 0, 0.35, 1), background 0.3s ease;
+}
+
+/* 6. СТАТУСНІ ІНДИКАТОРИ */
+.status-safe { color: var(--success-green); background: rgba(16, 185, 129, 0.1); }
+.status-warning { color: var(--warning-orange); background: rgba(245, 158, 11, 0.1); }
+.status-danger { color: var(--danger-red); background: rgba(239, 68, 68, 0.1); }
+
+/* 7. ДЕКОРАТИВНІ ЕЛЕМЕНТИ (ГРАДІЄНТИ) */
+.text-gradient {
+    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bg-grid-pattern {
+    background-image: 
+        radial-gradient(circle at 2px 2px, rgba(59, 130, 246, 0.15) 1px, transparent 0);
+    background-size: 24px 24px;
+}
+
+/* 8. АДАПТИВНІСТЬ ДЛЯ МОБІЛЬНИХ ПРИСТРОЇВ */
+@media (max-width: 768px) {
+    #viewport-container {
+        height: 350px;
+    }
+    
+    .glass-panel {
+        padding: 1rem;
+    }
+    
+    .text-4xl {
+        font-size: 1.875rem;
+    }
+}
+
+/**
+ * КІНЕЦЬ ФАЙЛУ styles.css
+ * Цей файл забезпечує візуальну цілісність проєкту.
+ * Використання GPU-прискорення для анімацій гарантує високу продуктивність.
+ */
