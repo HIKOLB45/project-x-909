@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="uk" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Професійна система розрахунку та 3D візуалізації односхилого навісу 5х5 метрів. Калькулятор навантажень, специфікація матеріалів та інженерні поради.">
+    <meta name="author" content="Mykyta Melnichenko - Engineering Solutions">
+    <title>UltraCanopy Pro | Інженерний Розрахунок Навісу 5х5</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* Кастомні стилі для розширення можливостей Tailwind */
+        body { font-family: 'Inter', sans-serif; background-color: #020617; }
+        
+        /* Скляний ефект для карток (Glassmorphism) */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        /* Анімація світіння для активних елементів */
+        .glow-blue { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+
+        /* Кастомний скролбар */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* Стилізація 3D в'юпорту */
+        #viewport-container {
+            position: relative;
+            height: 600px;
+            width: 100%;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
+        }
+
+        .status-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body class="text-slate-200">
+
+    <div class="fixed inset-0 z-[-1] opacity-20 pointer-events-none" 
+         style="background-image: linear-gradient(#1e293b 1px, transparent 1px), linear-gradient(90deg, #1e293b 1px, transparent 1px); background-size: 50px 50px;">
+    </div>
+
+    <nav class="sticky top-0 z-50 glass-panel border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold">U</div>
+                <span class="text-xl font-extrabold tracking-tighter text-white">ULTRACANOPY <span class="text-blue-500">PRO</span></span>
+            </div>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
+                <a href="#specification" class="hover:text-blue-400 transition-colors">Специфікація</a>
+                <a href="#calculator" class="hover:text-blue-400 transition-colors">Калькулятор</a>
+                <a href="#3d-model" class="hover:text-blue-400 transition-colors">3D Модель</a>
+                <a href="#guide" class="hover:text-blue-400 transition-colors">Інструкція</a>
+            </div>
+            <button class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-lg shadow-blue-900/20">
+                Експорт PDF
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        
+        <section id="3d-model" class="grid grid-cols-12 gap-8 mb-16">
+            <div class="col-span-12 lg:col-span-8">
+                <div class="glass-panel p-2 rounded-2xl overflow-hidden">
+                    <div id="viewport-container">
+                        <div class="absolute top-4 left-4 z-10 flex gap-2">
+                            <span class="status-badge bg-green-900/50 text-green-400 border border-green-500/30">Engine: WebGL 2.0</span>
+                            <span class="status-badge bg-blue-900/50 text-blue-400 border border-blue-500/30">Scale: 1:1</span>
+                        </div>
+                        <div class="absolute bottom-4 right-4 z-10 text-slate-500 text-[10px] uppercase tracking-widest">
+                            Interactive 3D Environment / Use mouse to rotate
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="col-span-12 lg:col-span-4 space-y-6">
+                <div class="glass-panel p-6 rounded-2xl glow-blue">
+                    <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                        Параметри конструкції
+                    </h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs uppercase text-slate-500 font-bold mb-2">Ширина х Довжина (м)</label>
+                            <div class="grid grid-cols-2 gap-2 text-center font-mono bg-slate-900 p-3 rounded-lg border border-slate-800">
+                                <span class="text-blue-400">5.00</span>
+                                <span class="text-blue-400">5.00</span>
+                            </div>
+                        </div>
+                        <hr class="border-slate-800">
+                        <div id="calculator-inputs">
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="specification" class="mb-16">
+             <div class="glass-panel p-8 rounded-2xl">
+                <h3 class="text-2xl font-black text-white mb-6 uppercase tracking-tight">Повна специфікація матеріалів (Engineering BOM)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-slate-500 text-xs uppercase border-b border-slate-800">
+                                <th class="pb-4 font-black">ID</th>
+                                <th class="pb-4 font-black">Елемент</th>
+                                <th class="pb-4 font-black">Профіль (мм)</th>
+                                <th class="pb-4 font-black">Довжина (м)</th>
+                                <th class="pb-4 font-black">К-сть</th>
+                                <th class="pb-4 font-black">Вага (кг)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="materials-table-body" class="text-sm divide-y divide-slate-800/50">
+                            </tbody>
+                    </table>
+                </div>
+             </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-slate-800 py-12 bg-slate-950">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-slate-500 text-sm">© 2026 UltraCanopy Systems. Розроблено для інженерних розрахунків.</p>
+        </div>
+    </footer>
+
+    <script src="utils.js"></script>
+    <script src="calculator.js"></script>
+    <script src="engine3d.js"></script>
+</body>
+</html>
